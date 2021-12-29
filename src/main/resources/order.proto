@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package order;
+
+import "user.proto";
+
+option java_package = "com.cybage.order";
+option java_multiple_files = true;
+
+enum Status{
+    PENDING=0;
+    IN_PROGRESS=1;
+    SUCCESS=2;
+    FAILED=3;
+
+}
+enum PaymentStatus{
+    PAID=0;
+    UNPAID=1;
+}
+
+message  Item{
+    int32 itemID=1;
+    string itemName=2;
+    int32 price=3;
+}
+
+service OrderService{
+    rpc placeOrder(OrderRequest) returns (OrderResponse);
+    rpc getOrder(Empty) returns ( stream OrderResponse);
+}
+
+
+message OrderRequest{
+    repeated Item items=1;
+}
+message Empty{
+
+}
+message OrderResponse{
+    string orderID=1;
+    string orderDate=2;
+    int32 amount=3;
+    repeated  Item items=4;
+    int32  orderItemCount=5;
+    Status orderStatus=6;
+    PaymentStatus paymentStatus=7;
+
+}
